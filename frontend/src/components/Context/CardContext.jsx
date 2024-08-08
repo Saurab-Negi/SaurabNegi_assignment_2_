@@ -23,7 +23,7 @@ export const CardProvider = ({ children }) => {
   }, []);
 
   return (
-    <CardContext.Provider value={{ users, loading }}>
+    <CardContext.Provider value={{ users, loading, setUsers }}>
       {children}
     </CardContext.Provider>
   );
