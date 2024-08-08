@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Upload, message } from 'antd';
 import axios from 'axios';
+import { useCard } from '../Context/CardContext';
 
 const CardEdit = ({ user, onUpdate, onClose }) => {
+
+  const { url }= useCard();
+
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -19,7 +23,7 @@ const CardEdit = ({ user, onUpdate, onClose }) => {
         formData.append('phone', values.phone);
         formData.append('website', values.website);
         
-        const response = await axios.post('http://localhost:3000/user/update', formData, {
+        const response = await axios.post(url+'/user/update', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
