@@ -5,25 +5,31 @@ export const CardContext = createContext();
 
 // Create a provider component
 export const CardProvider = ({ children }) => {
+  
+  const url = "http://localhost:3000";
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/users');
-        const data = await response.json();
-        setUsers(data);
+        const response = await fetch(url + '/user/fetch');
+        const result = await response.json();
+        setUsers(Array.isArray(result.data) ? result.data : []); // Use result.data instead of result
         setLoading(false);
       } catch (error) {
         console.error('Error fetching users:', error);
+        setLoading(false);
       }
     };
     fetchUsers();
   }, []);
+  
+  
 
   return (
-    <CardContext.Provider value={{ users, loading, setUsers }}>
+    <CardContext.Provider value={{ url, users, loading, setUsers }}>
       {children}
     </CardContext.Provider>
   );

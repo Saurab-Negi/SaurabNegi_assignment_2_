@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
-import { Button, Form, Input } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Form, Input, Upload, message } from 'antd';
+import axios from 'axios';
 
 const CardEdit = ({ user, onUpdate, onClose }) => {
   const [form] = Form.useForm();
@@ -9,16 +10,37 @@ const CardEdit = ({ user, onUpdate, onClose }) => {
   }, [user, form]);
 
   const handleOk = () => {
-    form.validateFields().then(values => {
-      const updatedUser = { ...user, ...values };
-      onUpdate(updatedUser);
-      onClose();
+    form.validateFields().then(async (values) => {
+      try {
+        const formData = new FormData();
+        formData.append('id', user._id);
+        formData.append('name', values.name);
+        formData.append('email', values.email);
+        formData.append('phone', values.phone);
+        formData.append('website', values.website);
+        
+        const response = await axios.post('http://localhost:3000/user/update', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        if (response.data.success) {
+          onUpdate(response.data.data); // Update user in the context
+          onClose();
+          message.success('User updated successfully!');
+        } else {
+          message.error('Failed to update user.');
+        }
+      } catch (error) {
+        console.error('Error updating user:', error);
+      }
     });
   };
 
-  const handleCancel= () =>{
+  const handleCancel = () => {
     onClose();
-  }
+  };
 
   return (
     <Form form={form} layout="vertical">
