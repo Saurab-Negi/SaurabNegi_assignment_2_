@@ -6,7 +6,7 @@ export const CardContext = createContext();
 // Create a provider component
 export const CardProvider = ({ children }) => {
   
-  const url = "http://localhost:3000";
+  const url = "https://saurabnegi-assignment-3-backend.onrender.com";
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
